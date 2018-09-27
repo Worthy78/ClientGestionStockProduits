@@ -9,12 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProduitComponent implements OnInit{
 
-    produits: Produit[];    
-    constructor(private produitService: ProduitMockService){
-        
-    }
+    produits: Produit[];
+    constructor(private produitService: ProduitMockService) {}
 
-    ngOnInit(){
+    ngOnInit() {
         this.produits = this.produitService.getProduits();
     }
 }
