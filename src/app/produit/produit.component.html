@@ -1,7 +1,99 @@
-<p>Modou</p>
+<h3>Liste des produits</h3>
 
-<ul>
-    <li *ngFor="let produit of produits">
-        Ref: {{produit.ref}}, Quantite: {{produit.quantite}}, Prix Unitaire: {{produit.prixUnitaire}} $
-    </li>
-</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-7">
+          <table class="table table-hover">
+            <thead>
+                <th>
+                  Réference
+                </th>
+                <th>
+                  Quantité
+                </th>
+                <th>
+                  Prix Unitaire
+                </th>
+                <th>
+                  <button class="btn btn-outline-success" (click)="operation = 'add'; initProduit()">Ajouter <i class="fa fa-plus"></i></button>
+                </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let produit of produits">
+                  <td>
+                    {{produit.ref}}
+                  </td>
+                  <td>
+                    {{produit.quantite}}
+                  </td>
+                  <td>
+                    {{produit.prixUnitaire}} F CFA
+                  </td>
+                  <td>
+                    <span>
+                    <button class="btn btn-outline-primary" (click)="operation = 'edit'; selectedProduit = produit;"><i class="fa fa-edit"></i> Edit</button>
+                    <button class="btn btn-outline-danger" (click)="operation = 'remove';">Suprimer <i class="fa fa-remove"></i></button>
+                    </span>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-5">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                {{ operation == 'add' ? 'Ajouter Produit' :
+                operation == 'edit' ? 'Modifier Produit' :
+                operation == 'remove' ? 'Supprimer Produit' : ''
+              }}
+              </div>
+              <div class="card-body">
+                <div *ngIf="operation == 'add' || operation == 'edit'">
+                    <form [formGroup]="produitForm">
+                        <div class="form-group">
+                          <label>Réference</label>
+                          <input type="text" formControlName="ref" class="form-control" placeholder="nom du produit..." [(ngModel)]="selectedProduit.ref"/>
+                        </div>
+                        <div class="alert alert-danger" *ngIf="produitForm.controls['ref'].invalid && (produitForm.controls['ref'].touched || produitForm.controls['ref'].dirty)">
+                          La réference est obligatoire!!
+                        </div>
+                        <div class="form-group">
+                          <label>Quantité</label>
+                          <input type="number" formControlName="quantite" class="form-control" placeholder="quantité de l'article..." [(ngModel)]="selectedProduit.quantite"/>
+                        </div>
+                        <div class="alert alert-danger" *ngIf="produitForm.controls['quantite'].invalid && (produitForm.controls['quantite'].touched || produitForm.controls['quantite'].dirty)">
+                            La quantité est obligatoire!!
+                          </div>
+                        <div class="form-group">
+                          <label>Prix Unitaire</label>
+                          <input type="number" formControlName="prixUnitaire" class="form-control" placeholder="10000..." [(ngModel)]="selectedProduit.prixUnitaire"/>FCFA
+                        </div>
+                        <div class="alert alert-danger" *ngIf="produitForm.controls['prixUnitaire'].invalid && (produitForm.controls['prixUnitaire'].touched || produitForm.controls['prixUnitaire'].dirty)">
+                            Le prix est obligatoire!!
+                          </div>
+                        <button class="btn btn-success" [disabled]="produitForm.pristine || produitForm.invalid"
+                        (click)="operation == 'add' ? addProduit() : updateProduit()">
+                            {{ operation == 'add' ? 'Ajouter' :
+                               operation == 'edit' ? 'Modifier' :
+                               operation == 'remove' ? 'Supprimer' : ''
+                            }}
+                      </button>
+                      </form>
+                </div>
+                <div *ngIf="operation == 'remove'">
+                  <p class="card-title">
+                      Référence: {{ selectedProduit.ref }}
+                  </p>
+                  <p>
+                    Voulez-vous supprimer ce produit?
+                  </p>
+                  <button class="btn btn-success" (click)="deleteProduit()">Confirmer</button>
+                </div>
+              </div>
+              <div class="card-footer">
+
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
